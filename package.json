@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/imnikoo/fetcher/issues"
   },
-  "homepage": "https://github.com/imnikoo/fetcher#readme"
+  "homepage": "https://github.com/imnikoo/fetcher#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "fs": "0.0.1-security",
+    "lodash": "^4.17.5",
+    "needle": "^2.2.0",
+    "node-telegram-bot-api": "^0.30.0",
+    "repeat": "0.0.6"
+  }
 }
