@@ -2,9 +2,10 @@
   "name": "olx-fetch",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,11 +18,13 @@
   },
   "homepage": "https://github.com/imnikoo/fetcher#readme",
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
-    "fs": "0.0.1-security",
+    "cheerio": "^1.0.0",
     "lodash": "^4.17.5",
-    "needle": "^2.2.0",
-    "node-telegram-bot-api": "^0.30.0",
+    "luxon": "^3.5.0",
+    "node-fetch": "^3.3.2",
+    "node-schedule": "^2.1.1",
+    "node-telegram-bot-api": "0.66.0",
+    "puppeteer": "^23.4.1",
     "repeat": "0.0.6"
   }
 }
