@@ -15,6 +15,24 @@ var processBegin = false;
 var roomIdsToSend = [];
 var job;
 
+bot.onText(/\/immediately/, (msg, match) => {
+    const chatId = msg.chat.id;
+    if (!_.some(roomIdsToSend, chatId)) {
+        roomIdsToSend.push(chatId);
+    }
+    if (processBegin) {
+        bot.sendMessage(chatId, "I'm working, i'll tell you the news");
+    } else {
+        processBegin = true;
+        bot.sendMessage(chatId, "Okey, lets go, ill tell you the news");
+
+        fetching();
+        job = schedule.scheduleJob('* 17 * * *', fetching);
+        console.log(job.nextInvocation());
+        sendMessageToAllSubscribers("Next time i will come at " + job.nextInvocation());
+    }
+});
+
 bot.onText(/\/start/, (msg, match) => {
     const chatId = msg.chat.id;
     if (!_.some(roomIdsToSend, chatId)) {
@@ -26,8 +44,9 @@ bot.onText(/\/start/, (msg, match) => {
         processBegin = true;
         bot.sendMessage(chatId, "Okey, lets go, ill tell you the news");
 
-        job = schedule.scheduleJob('* * */24 * *', fetching);
-
+        job = schedule.scheduleJob('* 17 * * *', fetching);
+        console.log(job.nextInvocation());
+        sendMessageToAllSubscribers("Next time i will come at " + job.nextInvocation());
     }
 });
 
@@ -46,7 +65,9 @@ function sendMessageToAllSubscribers(msg) {
 }
 async function fetching() {
     console.log('start fetch');
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ headless: true });
+
+
     console.log('open browser');
     const page = await browser.newPage();
 
@@ -75,9 +96,9 @@ async function fetching() {
             description: $(el)
                 .find('.entity-description')
                 .text(),
-            link: $(el)
+            link: `https://www.njuskalo.hr${$(el)
                 .find('.entity-title > a')
-                .attr('href'),
+                .attr('href')}`,
             price: $(el)
                 .find('.entity-prices')
                 .text()
@@ -96,7 +117,7 @@ async function fetching() {
     await browser.close();
 
     let filteredByDate = _.filter(offertas, (o) => {
-         return extractDate(o.date), DateTime.fromFormat(o.date, 'dd.MM.yy').diffNow('days').negate().days < 1;
+         return DateTime.fromFormat(extractDate(o.date), 'dd.MM.yy').diffNow('days').negate().days < 1;
     });
 
     if (fs.existsSync('./db.json')) {
